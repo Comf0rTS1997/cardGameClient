@@ -13,7 +13,7 @@ public class Client implements Runnable{
 	private boolean running;
 	
 	public Client() {
-		this.serverIP = "75.172.166.37";
+		this.serverIP = "attu8.cs.washington.edu";
 		this.port = 8888;
 		this.running = false;
 	}
@@ -38,10 +38,11 @@ public class Client implements Runnable{
 		}
 	}
 	
-	private void response() throws IOException {
+	private void response() throws IOException, InterruptedException {
 		while(running) {
 			String si = in.readLine(); // server instruction
 			char siC = si.trim().toUpperCase().charAt(0);
+			System.out.println("ServerInstruction: " + si); // debug
 			switch(siC) {
 				case 'P':
 					playGame();
@@ -56,7 +57,11 @@ public class Client implements Runnable{
 					System.out.println("You lost.");
 					stop();
 					break;
+				case 'S':
+					playGame();
+					break;
 			}
+			Thread.sleep(500);
 		}
 	}
 	
@@ -85,7 +90,8 @@ public class Client implements Runnable{
 					break;
 			}	
 		}
-		out.print(resultToServer);		
+		System.out.println("Return to server: " + resultToServer);		
+		out.println(resultToServer);
 	}
 	
 	public void stop() throws IOException {
